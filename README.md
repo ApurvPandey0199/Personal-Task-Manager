@@ -5,8 +5,8 @@ TaskFlow is a state-of-the-art, premium-grade Personal Task Manager built with a
 ---
 
 ## 🔗 1. Live Demo Links
-* **Frontend Web App:** [https://taskflow-client.vercel.app](https://taskflow-client.vercel.app) *(Demo Placeholder)*
-* **Backend API Gateway:** [https://taskflow-api.railway.app/health](https://taskflow-api.railway.app/health) *(Demo Placeholder)*
+* **⚡ Live Production Web App (Standalone Mode):** [https://personal-task-manager-client.vercel.app/](https://personal-task-manager-client.vercel.app/)
+* **🛠️ Local Development Server:** `http://localhost:5001/api/tasks`
 
 ---
 
