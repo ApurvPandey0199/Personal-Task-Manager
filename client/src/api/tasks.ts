@@ -48,12 +48,31 @@ let checkDone = false;
 
 const checkServer = async (): Promise<boolean> => {
   if (checkDone) return useFallback;
+
+  // If no backend API URL is provided and we are not running on localhost,
+  // we are in a static production deployment (like Vercel) without a backend.
+  // We should immediately fall back to local storage.
+  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  if (!API_BASE && !isLocal) {
+    useFallback = true;
+    checkDone = true;
+    console.warn("No VITE_API_URL provided in production. Falling back to local storage.");
+    return useFallback;
+  }
+
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 1500); // 1.5s timeout for fast fallback
     const res = await fetch(`${API_BASE}/api/tasks/stats`, { signal: controller.signal });
     clearTimeout(timeoutId);
-    useFallback = !res.ok;
+    
+    // Ensure the response is OK and it's actually JSON (not index.html from SPA rewrites)
+    const contentType = res.headers.get('content-type');
+    if (res.ok && contentType && contentType.includes('application/json')) {
+      useFallback = false;
+    } else {
+      useFallback = true;
+    }
   } catch (error) {
     useFallback = true;
   }
